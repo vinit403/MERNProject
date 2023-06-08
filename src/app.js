@@ -62,6 +62,13 @@ app.post("/register", async(req, res) => {
             const token = await registerEmployee.generateAuthToken();
             console.log("token part is " + token);
 
+            // Cookie part
+
+            res.cookie("jwt", token, {
+                httpOnly: true,
+                expires: new Date(Date.now() + 30000),
+            });
+
             // Password hash process (This process is called middleware)
             // Code in models/registers.js file
 
@@ -93,6 +100,15 @@ app.post("/login", async(req, res) => {
 
         const token = await useremail.generateAuthToken();
         console.log("token part is " + token);
+
+
+        // Cookie part
+
+        res.cookie("jwt", token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 30000),
+        });
+
 
         if (isMatch) {
             res.status(201).render("index");
