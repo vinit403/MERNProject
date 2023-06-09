@@ -6,6 +6,7 @@ const hbs = require("hbs");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const cookieParser = require('cookie-parser');
+const auth = require('./middleware/auth');
 
 require("./db/conn");
 const Register = require("./models/registers");
@@ -32,8 +33,8 @@ app.get("/", (req, res) => {
     res.render("index")
 })
 
-app.get("/secret", (req, res) => {
-    console.log(`This is the Cookie Awesome :- ${req.cookies.jwt}`);
+app.get("/secret", auth, (req, res) => {
+    // console.log(`This is the Cookie Awesome :- ${req.cookies.jwt}`);
     res.render("secret")
 })
 
