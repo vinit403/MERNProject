@@ -4,6 +4,9 @@ const path = require("path");
 const app = express();
 const hbs = require("hbs");
 const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
+const cookieParser = require('cookie-parser');
+
 require("./db/conn");
 const Register = require("./models/registers");
 
@@ -13,6 +16,7 @@ const template_path = path.join(__dirname, "../templates/views");
 const partials_path = path.join(__dirname, "../templates/partials");
 
 app.use(express.json());
+app.use(cookieParser());
 
 //Get the data for form 
 app.use(express.urlencoded({ extended: false }));
@@ -26,6 +30,11 @@ hbs.registerPartials(partials_path);
 
 app.get("/", (req, res) => {
     res.render("index")
+})
+
+app.get("/secret", (req, res) => {
+    console.log(`This is the Cookie Awesome :- ${req.cookies.jwt}`);
+    res.render("secret")
 })
 
 app.get("/register", (req, res) => {
@@ -66,7 +75,7 @@ app.post("/register", async(req, res) => {
 
             res.cookie("jwt", token, {
                 httpOnly: true,
-                expires: new Date(Date.now() + 30000),
+                expires: new Date(Date.now() + 600000),
             });
 
             // Password hash process (This process is called middleware)
@@ -106,7 +115,7 @@ app.post("/login", async(req, res) => {
 
         res.cookie("jwt", token, {
             httpOnly: true,
-            expires: new Date(Date.now() + 30000),
+            expires: new Date(Date.now() + 600000),
         });
 
 
