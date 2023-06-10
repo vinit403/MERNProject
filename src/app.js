@@ -50,9 +50,15 @@ app.get("/logout", auth, async(req, res) => {
     try {
         console.log(req.user);
 
-        req.user.tokens = req.user.tokens.filter((currElement) => {
-            return currElement.token !== req.token;
-        })
+        //for single device log out process
+
+        // req.user.tokens = req.user.tokens.filter((currElement) => {
+        //     return currElement.token !== req.token;
+        // })
+
+        // Log out for all devices process
+
+        req.user.tokens = [];
 
         res.clearCookie('jwt');
 
