@@ -46,6 +46,25 @@ app.get("/login", (req, res) => {
     res.render("login")
 })
 
+app.get("/logout", auth, async(req, res) => {
+    try {
+        console.log(req.user);
+
+        req.user.tokens = req.user.tokens.filter((currElement) => {
+            return currElement.token !== req.token;
+        })
+
+        res.clearCookie('jwt');
+
+        console.log("Successfully logout");
+        await req.user.save();
+        res.render("login");
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
 // create a new user in our database
 app.post("/register", async(req, res) => {
     try {
